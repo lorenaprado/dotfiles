@@ -45,12 +45,12 @@ set expandtab
 
 " ==================== Colors ======================
 
-"
 set term=xterm-256color
 " Turn on highlight text
 syntax enable
 set background=dark
-colorscheme solarized
+"colorscheme solarized
+colorscheme koehler
 highlight LineNr ctermfg=darkgray
 " Highlight current line
 set cursorline
@@ -74,7 +74,15 @@ autocmd! BufWritePost .vimrc source ~/.vimrc
 
 " ==================== Folding ======================
 
-" Fold based on markers
+" Fold based on regular expression
 set foldmethod=expr
-" Start with fold level of 1
-set foldlevelstart=10
+set foldexpr=IsFold()
+
+function! IsFold()
+    let thisline = getline(v:lnum)
+    if match(thisline, '^\" =* .* =*$') >= 0
+        return ">1"
+    else
+        return "="    
+    endif
+endfunction    
